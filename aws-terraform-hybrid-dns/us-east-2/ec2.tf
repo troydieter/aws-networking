@@ -143,13 +143,13 @@ resource "aws_instance" "onpremdnsa" {
     bindkeys-file "/etc/named.iscdlv.key";
     managed-keys-directory "/var/named/dynamic";
   };
-  zone "corp.microgreens4life.org" IN {
+  zone "corp.contoso.io" IN {
       type master;
-      file "corp.microgreens4life.org.zone";
+      file "corp.contoso.io.zone";
       allow-update { none; };
   };
   EOF
-  cat <<EOF > /var/named/corp.microgreens4life.org.zone
+  cat <<EOF > /var/named/corp.contoso.io.zone
   \$TTL 86400
   @   IN  SOA     ns1.mydomain.com. root.mydomain.com. (
           2013042201  ;Serial
@@ -159,8 +159,8 @@ resource "aws_instance" "onpremdnsa" {
           86400       ;Minimum TTL
   )
   ; Specify our two nameservers
-      IN	NS		dnsA.corp.microgreens4life.org.
-      IN	NS		dnsB.corp.microgreens4life.org.
+      IN	NS		dnsA.corp.contoso.io.
+      IN	NS		dnsB.corp.contoso.io.
   ; Resolve nameserver hostnames to IP, replace with your two droplet IP addresses.
   dnsA		IN	A		1.1.1.1
   dnsB	  IN	A		8.8.8.8
@@ -216,13 +216,13 @@ resource "aws_instance" "onpremdnsb" {
     bindkeys-file "/etc/named.iscdlv.key";
     managed-keys-directory "/var/named/dynamic";
   };
-  zone "corp.microgreens4life.org" IN {
+  zone "corp.contoso.io" IN {
       type master;
-      file "corp.microgreens4life.org.zone";
+      file "corp.contoso.io.zone";
       allow-update { none; };
   };
   EOF
-  cat <<EOF > /var/named/corp.microgreens4life.org.zone
+  cat <<EOF > /var/named/corp.contoso.io.zone
   \$TTL 86400
   @   IN  SOA     ns1.mydomain.com. root.mydomain.com. (
           2013042201  ;Serial
@@ -232,8 +232,8 @@ resource "aws_instance" "onpremdnsb" {
           86400       ;Minimum TTL
   )
   ; Specify our two nameservers
-      IN	NS		dnsA.corp.microgreens4life.org.
-      IN	NS		dnsB.corp.microgreens4life.org.
+      IN	NS		dnsA.corp.contoso.io.
+      IN	NS		dnsB.corp.contoso.io.
   ; Resolve nameserver hostnames to IP, replace with your two droplet IP addresses.
   dnsA		IN	A		1.1.1.1
   dnsB	  IN	A		8.8.8.8

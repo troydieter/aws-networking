@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "awsdnsm4lcom" {
-  name = "aws.microgreens4life.org"
+  name = "aws.contoso.io"
 
   vpc {
     vpc_id = aws_vpc.awsvpc.id
@@ -8,7 +8,7 @@ resource "aws_route53_zone" "awsdnsm4lcom" {
 
 resource "aws_route53_record" "awsdnsm4lcomweb" {
   zone_id = aws_route53_zone.awsdnsm4lcom.zone_id
-  name    = "web.aws.microgreens4life.org"
+  name    = "web.aws.contoso.io"
   type    = "A"
   ttl     = "60"
   records = [
@@ -50,7 +50,7 @@ resource "aws_route53_resolver_endpoint" "m4loutbound" {
 }
 
 resource "aws_route53_resolver_rule" "m4loutbound_fwd" {
-  domain_name          = "corp.microgreens4life.org"
+  domain_name          = "corp.contoso.io"
   name                 = "m4l-corpzone"
   rule_type            = "FORWARD"
   resolver_endpoint_id = aws_route53_resolver_endpoint.m4loutbound.id

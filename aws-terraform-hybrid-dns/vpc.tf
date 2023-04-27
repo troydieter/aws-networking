@@ -4,7 +4,7 @@ resource "aws_vpc" "awsvpc" {
   enable_dns_support   = "true"
   enable_dns_hostnames = "true"
   tags = {
-    Name = "micros4l-aws"
+    Name = "micros4l-aws-${random_id.rando_primary.hex}"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_subnet" "micros4l-private-a" {
   cidr_block        = "10.10.0.0/24"
   availability_zone = data.aws_availability_zones.available.names[0]
   tags = {
-    Name = "micros4l-private-a"
+    Name = "micros4l-private-a-${random_id.rando_primary.hex}"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_subnet" "micros4l-private-b" {
   cidr_block        = "10.10.10.0/24"
   availability_zone = data.aws_availability_zones.available_secondary.names[1]
   tags = {
-    Name = "micros4l-private-b"
+    Name = "micros4l-private-b-${random_id.rando_primary.hex}"
   }
 }
 
@@ -76,7 +76,7 @@ resource "aws_route_table" "micros4l-aws-rt" {
   provider = aws.primary
   vpc_id   = aws_vpc.awsvpc.id
   tags = {
-    Name = "micros4l-aws-rt"
+    Name = "micros4l-aws-rt-${random_id.rando_primary.hex}"
   }
 }
 
@@ -160,7 +160,7 @@ resource "aws_vpc" "onpremvpc" {
   enable_dns_support   = "true"
   enable_dns_hostnames = "true"
   tags = {
-    Name = "micros4l-onprem"
+    Name = "micros4l-onprem-${random_id.rando_secondary.hex}"
   }
 }
 
@@ -174,7 +174,7 @@ resource "aws_subnet" "onprem-private-a" {
   cidr_block        = "192.168.10.0/25"
   availability_zone = data.aws_availability_zones.available_secondary.names[0]
   tags = {
-    Name = "onprem-private-a"
+    Name = "onprem-private-a-${random_id.rando_secondary.hex}"
   }
 }
 
@@ -184,7 +184,7 @@ resource "aws_subnet" "onprem-private-b" {
   cidr_block        = "192.168.10.128/25"
   availability_zone = data.aws_availability_zones.available_secondary.names[1]
   tags = {
-    Name = "onprem-private-b"
+    Name = "onprem-private-b-${random_id.rando_secondary.hex}"
   }
 }
 
@@ -192,7 +192,7 @@ resource "aws_route_table" "onprem-private-rt" {
   provider = aws.secondary
   vpc_id   = aws_vpc.onpremvpc.id
   tags = {
-    Name = "onprem-private-rt"
+    Name = "onprem-private-rt-${random_id.rando_secondary.hex}"
   }
 }
 

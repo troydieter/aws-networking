@@ -27,7 +27,8 @@ data "aws_iam_instance_profile" "EC2profile" {
 
 data "aws_route53_resolver_endpoint" "inbound" {
   filter {
-    name = aws_route53_resolver_endpoint.m4linbound.name
+    name = "NAME"
+    values = ["${aws_route53_resolver_endpoint.m4linbound.name}"]
   }
   depends_on = [
     aws_route53_resolver_endpoint.m4linbound

@@ -1,0 +1,5 @@
+zone "aws.contoso.io" { 
+  type forward; 
+  forward only;
+  forwarders { VALUE1; VALUE2; }; 
+};

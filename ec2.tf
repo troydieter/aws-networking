@@ -431,8 +431,7 @@ resource "aws_instance" "onpremdnsb" {
   cd /tmp 
   sudo yum install -y https://s3.${var.region_secondary}.amazonaws.com/amazon-ssm-${var.region_secondary}/latest/linux_amd64/amazon-ssm-agent.rpm 
   sudo systemctl enable amazon-ssm-agent 
-  sudo systemctl start amazon-ssm-agent    
-
+  sudo systemctl start amazon-ssm-agent
 EOT
 }
 

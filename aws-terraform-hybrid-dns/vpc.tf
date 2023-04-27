@@ -99,7 +99,7 @@ resource "aws_vpc_endpoint" "awsssminterfaceendpoint" {
     aws_subnet.micros4l-private-a.id,
     aws_subnet.micros4l-private-b.id
   ]
-  service_name      = "com.amazonaws.${var.region}.ssm"
+  service_name      = "com.amazonaws.${var.region_primary}.ssm"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -116,7 +116,7 @@ resource "aws_vpc_endpoint" "awsssmec2messagesinterfaceendpoint" {
     aws_subnet.micros4l-private-a.id,
     aws_subnet.micros4l-private-b.id
   ]
-  service_name      = "com.amazonaws.${var.region}.ec2messages"
+  service_name      = "com.amazonaws.${var.region_primary}.ec2messages"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -133,7 +133,7 @@ resource "aws_vpc_endpoint" "awsssmmessagesinterfaceendpoint" {
     aws_subnet.micros4l-private-a.id,
     aws_subnet.micros4l-private-b.id
   ]
-  service_name      = "com.amazonaws.${var.region}.ssmmessages"
+  service_name      = "com.amazonaws.${var.region_primary}.ssmmessages"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -147,7 +147,7 @@ resource "aws_vpc_endpoint" "awss3endpoint" {
   provider        = aws.primary
   vpc_id          = aws_vpc.awsvpc.id
   route_table_ids = [aws_route_table.micros4l-aws-rt.id]
-  service_name    = "com.amazonaws.${var.region}.s3"
+  service_name    = "com.amazonaws.${var.region_primary}.s3"
 }
 
 ################################################
@@ -215,7 +215,7 @@ resource "aws_vpc_endpoint" "onpremssminterfaceendpoint" {
     aws_subnet.onprem-private-a.id,
     aws_subnet.onprem-private-b.id
   ]
-  service_name      = "com.amazonaws.${var.region}.ssm"
+  service_name      = "com.amazonaws.${var.region_secondary}.ssm"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -232,7 +232,7 @@ resource "aws_vpc_endpoint" "onpremssmec2messagesinterfaceendpoint" {
     aws_subnet.onprem-private-a.id,
     aws_subnet.onprem-private-b.id
   ]
-  service_name      = "com.amazonaws.${var.region}.ec2messages"
+  service_name      = "com.amazonaws.${var.region_secondary}.ec2messages"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -249,7 +249,7 @@ resource "aws_vpc_endpoint" "onpremssmmessagesinterfaceendpoint" {
     aws_subnet.onprem-private-a.id,
     aws_subnet.onprem-private-b.id
   ]
-  service_name      = "com.amazonaws.${var.region}.ssmmessages"
+  service_name      = "com.amazonaws.${var.region_secondary}.ssmmessages"
   vpc_endpoint_type = "Interface"
 
   security_group_ids = [
@@ -263,5 +263,5 @@ resource "aws_vpc_endpoint" "onprems3endpoint" {
   provider        = aws.secondary
   vpc_id          = aws_vpc.onpremvpc.id
   route_table_ids = [aws_route_table.onprem-private-rt.id]
-  service_name    = "com.amazonaws.${var.region}.s3"
+  service_name    = "com.amazonaws.${var.region_secondary}.s3"
 }

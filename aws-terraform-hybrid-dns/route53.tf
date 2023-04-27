@@ -21,7 +21,7 @@ resource "aws_route53_record" "awsdnsm4lcomweb" {
 
 resource "aws_route53_resolver_endpoint" "m4linbound" {
   provider  = aws.primary
-  name      = "m4linbound"
+  name      = "m4linbound-${random_id.rando_primary.hex}"
   direction = "INBOUND"
 
   security_group_ids = [aws_security_group.AWSSecurityGroup.id]
@@ -38,7 +38,7 @@ resource "aws_route53_resolver_endpoint" "m4linbound" {
 
 resource "aws_route53_resolver_endpoint" "m4loutbound" {
   provider  = aws.primary
-  name      = "m4loutbound"
+  name      = "m4loutbound-${random_id.rando_primary.hex}"
   direction = "OUTBOUND"
 
   security_group_ids = [aws_security_group.AWSSecurityGroup.id]
@@ -56,16 +56,16 @@ resource "aws_route53_resolver_endpoint" "m4loutbound" {
 resource "aws_route53_resolver_rule" "m4loutbound_fwd" {
   provider             = aws.primary
   domain_name          = "corp.contoso.io"
-  name                 = "m4l-corpzone"
+  name                 = "m4l-corpzone-${random_id.rando_primary.hex}"
   rule_type            = "FORWARD"
   resolver_endpoint_id = aws_route53_resolver_endpoint.m4loutbound.id
 
   target_ip {
-    ip = var.onpremdnsa_priv_ip
+    ip = aws_instance.onpremdnsa.private_ip
   }
 
   target_ip {
-    ip = var.onpremdnsb_priv_ip
+    ip = aws_instance.onpremdnsb.private_ip
   }
 
 }

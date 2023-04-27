@@ -1,4 +1,8 @@
-resource "random_id" "rando" {
+resource "random_id" "rando_primary" {
+  byte_length = 2
+}
+
+resource "random_id" "rando_secondary" {
   byte_length = 2
 }
 
@@ -15,12 +19,12 @@ data "aws_ami" "amazon-linux-2" {
 
 data "aws_iam_instance_profile" "EC2profile" {
   provider = aws.primary
-  name     = "EC2profile"
+  name     = "EC2profile-${random_id.rando_primary.hex}"
 }
 
 resource "aws_security_group" "AWSSecurityGroup" {
   provider    = aws.primary
-  name        = "AWSSecurityGroup"
+  name        = "AWSSecurityGroup-${random_id.rando_primary.hex}"
   description = "Enable SSH and DNS"
   vpc_id      = aws_vpc.awsvpc.id
 
@@ -126,12 +130,12 @@ resource "aws_instance" "awsec2a" {
   subnet_id              = aws_subnet.micros4l-private-a.id
   vpc_security_group_ids = [aws_security_group.AWSSecurityGroup.id]
   tags = {
-    Name = "micros4l-awsec2a"
+    Name = "micros4l-awsec2a-${random_id.rando_primary.hex}"
   }
   user_data = <<EOF
   #!/bin/bash -xe
   cd /tmp 
-  sudo yum install -y https://s3.${var.region}.amazonaws.com/amazon-ssm-${var.region}/latest/linux_amd64/amazon-ssm-agent.rpm 
+  sudo yum install -y https://s3.${var.region_primary}.amazonaws.com/amazon-ssm-${var.region_primary}/latest/linux_amd64/amazon-ssm-agent.rpm 
   sudo systemctl enable amazon-ssm-agent 
   sudo systemctl start amazon-ssm-agent
 
@@ -151,12 +155,12 @@ resource "aws_instance" "awsec2b" {
   subnet_id              = aws_subnet.micros4l-private-b.id
   vpc_security_group_ids = [aws_security_group.AWSSecurityGroup.id]
   tags = {
-    Name = "micros4l-awsec2b"
+    Name = "micros4l-awsec2b-${random_id.rando_primary.hex}"
   }
   user_data = <<EOF
   #!/bin/bash -xe
   cd /tmp 
-  sudo yum install -y https://s3.${var.region}.amazonaws.com/amazon-ssm-${var.region}/latest/linux_amd64/amazon-ssm-agent.rpm
+  sudo yum install -y https://s3.${var.region_primary}.amazonaws.com/amazon-ssm-${var.region_primary}/latest/linux_amd64/amazon-ssm-agent.rpm
   sudo systemctl enable amazon-ssm-agent 
   sudo systemctl start amazon-ssm-agent
 
@@ -180,12 +184,12 @@ data "aws_ami" "amazon-linux-2_secondary" {
 
 data "aws_iam_instance_profile" "EC2profile_secondary" {
   provider = aws.secondary
-  name     = "EC2profile"
+  name     = "EC2profile-${random_id.rando_secondary.hex}"
 }
 
 resource "aws_security_group" "OnPremSecurityGroup" {
   provider    = aws.secondary
-  name        = "OnPremSecurityGroup"
+  name        = "OnPremSecurityGroup-${random_id.rando_secondary.hex}"
   description = "Enable SSH and DNS"
   vpc_id      = aws_vpc.onpremvpc.id
 
@@ -291,7 +295,7 @@ resource "aws_instance" "onpremdnsa" {
   subnet_id              = aws_subnet.onprem-private-a.id
   vpc_security_group_ids = [aws_security_group.OnPremSecurityGroup.id]
   tags = {
-    Name = "micros4l-onpremdnsa"
+    Name = "micros4l-onpremdnsa-${random_id.rando_secondary.hex}"
   }
   user_data = <<-EOT
   #!/bin/bash -xe
@@ -346,7 +350,7 @@ resource "aws_instance" "onpremdnsa" {
   service named restart
   chkconfig named on
   cd /tmp 
-  sudo yum install -y https://s3.${var.region}.amazonaws.com/amazon-ssm-${var.region}/latest/linux_amd64/amazon-ssm-agent.rpm 
+  sudo yum install -y https://s3.${var.region_secondary}.amazonaws.com/amazon-ssm-${var.region_secondary}/latest/linux_amd64/amazon-ssm-agent.rpm 
   sudo systemctl enable amazon-ssm-agent 
   sudo systemctl start amazon-ssm-agent
     
@@ -366,7 +370,7 @@ resource "aws_instance" "onpremdnsb" {
   subnet_id              = aws_subnet.onprem-private-b.id
   vpc_security_group_ids = [aws_security_group.OnPremSecurityGroup.id]
   tags = {
-    Name = "micros4l-onpremdnsb"
+    Name = "micros4l-onpremdnsb-${random_id.rando_secondary.hex}"
   }
   user_data = <<-EOT
   #!/bin/bash -xe
@@ -420,7 +424,7 @@ resource "aws_instance" "onpremdnsb" {
   service named restart
   chkconfig named on
   cd /tmp 
-  sudo yum install -y https://s3.${var.region}.amazonaws.com/amazon-ssm-${var.region}/latest/linux_amd64/amazon-ssm-agent.rpm 
+  sudo yum install -y https://s3.${var.region_secondary}.amazonaws.com/amazon-ssm-${var.region_secondary}/latest/linux_amd64/amazon-ssm-agent.rpm 
   sudo systemctl enable amazon-ssm-agent 
   sudo systemctl start amazon-ssm-agent    
 
@@ -440,12 +444,12 @@ resource "aws_instance" "onpremapp" {
   subnet_id              = aws_subnet.onprem-private-b.id
   vpc_security_group_ids = [aws_security_group.OnPremSecurityGroup.id]
   tags = {
-    Name = "micros4l-onpremapp"
+    Name = "micros4l-onpremapp-${random_id.rando_secondary.hex}"
   }
   user_data = <<EOF
   #!/bin/bash -xe
   cd /tmp 
-  sudo yum install -y https://s3.${var.region}.amazonaws.com/amazon-ssm-${var.region}/latest/linux_amd64/amazon-ssm-agent.rpm 
+  sudo yum install -y https://s3.${var.region_secondary}.amazonaws.com/amazon-ssm-${var.region_secondary}/latest/linux_amd64/amazon-ssm-agent.rpm 
   sudo systemctl enable amazon-ssm-agent 
   sudo systemctl start amazon-ssm-agent
 

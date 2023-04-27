@@ -20,6 +20,9 @@ data "aws_ami" "amazon-linux-2" {
 data "aws_iam_instance_profile" "EC2profile" {
   provider = aws.primary
   name     = "EC2profile-${random_id.rando_primary.hex}"
+  depends_on = [
+    aws_iam_instance_profile.EC2profile
+  ]
 }
 
 resource "aws_security_group" "AWSSecurityGroup" {
@@ -184,7 +187,10 @@ data "aws_ami" "amazon-linux-2_secondary" {
 
 data "aws_iam_instance_profile" "EC2profile_secondary" {
   provider = aws.secondary
-  name     = "EC2profile-${random_id.rando_secondary.hex}"
+  name     = "EC2profile-${random_id.rando_primary.hex}"
+  depends_on = [
+    aws_iam_instance_profile.EC2profile
+  ]
 }
 
 resource "aws_security_group" "OnPremSecurityGroup" {

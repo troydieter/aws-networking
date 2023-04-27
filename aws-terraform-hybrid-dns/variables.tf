@@ -1,5 +1,5 @@
 variable "owner" {
-  default     = "Troy Dieter"
+  default     = "Github User"
   description = "Deployer of these resources"
 }
 

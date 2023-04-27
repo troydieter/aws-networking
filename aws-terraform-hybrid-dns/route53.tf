@@ -1,5 +1,6 @@
 resource "aws_route53_zone" "awsdnsm4lcom" {
-  name = "aws.contoso.io"
+  provider = aws.primary
+  name     = "aws.contoso.io"
 
   vpc {
     vpc_id = aws_vpc.awsvpc.id
@@ -7,10 +8,11 @@ resource "aws_route53_zone" "awsdnsm4lcom" {
 }
 
 resource "aws_route53_record" "awsdnsm4lcomweb" {
-  zone_id = aws_route53_zone.awsdnsm4lcom.zone_id
-  name    = "web.aws.contoso.io"
-  type    = "A"
-  ttl     = "60"
+  provider = aws.primary
+  zone_id  = aws_route53_zone.awsdnsm4lcom.zone_id
+  name     = "web.aws.contoso.io"
+  type     = "A"
+  ttl      = "60"
   records = [
     aws_instance.awsec2a.private_ip,
     aws_instance.awsec2b.private_ip
@@ -18,6 +20,7 @@ resource "aws_route53_record" "awsdnsm4lcomweb" {
 }
 
 resource "aws_route53_resolver_endpoint" "m4linbound" {
+  provider  = aws.primary
   name      = "m4linbound"
   direction = "INBOUND"
 
@@ -34,6 +37,7 @@ resource "aws_route53_resolver_endpoint" "m4linbound" {
 }
 
 resource "aws_route53_resolver_endpoint" "m4loutbound" {
+  provider  = aws.primary
   name      = "m4loutbound"
   direction = "OUTBOUND"
 
@@ -50,6 +54,7 @@ resource "aws_route53_resolver_endpoint" "m4loutbound" {
 }
 
 resource "aws_route53_resolver_rule" "m4loutbound_fwd" {
+  provider             = aws.primary
   domain_name          = "corp.contoso.io"
   name                 = "m4l-corpzone"
   rule_type            = "FORWARD"
@@ -66,6 +71,7 @@ resource "aws_route53_resolver_rule" "m4loutbound_fwd" {
 }
 
 resource "aws_route53_resolver_rule_association" "m4loutbound_fwd_rule" {
+  provider         = aws.primary
   resolver_rule_id = aws_route53_resolver_rule.m4loutbound_fwd.id
   vpc_id           = aws_vpc.awsvpc.id
 }

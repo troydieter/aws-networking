@@ -1,9 +1,11 @@
 resource "aws_iam_instance_profile" "EC2profile" {
-  name = "EC2profile"
-  role = aws_iam_role.EC2Role.name
+  provider = aws.primary
+  name     = "EC2profile"
+  role     = aws_iam_role.EC2Role.name
 }
 
 resource "aws_iam_role" "EC2Role" {
+  provider           = aws.primary
   name               = "EC2Role"
   assume_role_policy = <<EOF
 {
@@ -24,11 +26,13 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "EC2Role-ssmcore-attach" {
+  provider   = aws.primary
   role       = aws_iam_role.EC2Role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_role_policy_attachment" "EC2Role-ssmpatch-attach" {
+  provider   = aws.primary
   role       = aws_iam_role.EC2Role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMPatchAssociation"
 }

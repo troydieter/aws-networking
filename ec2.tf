@@ -25,6 +25,15 @@ data "aws_iam_instance_profile" "EC2profile" {
   ]
 }
 
+data "aws_route53_resolver_endpoint" "inbound" {
+  filter {
+    name = aws_route53_resolver_endpoint.m4linbound.name
+  }
+  depends_on = [
+    aws_route53_resolver_endpoint.m4linbound
+  ]
+}
+
 resource "aws_security_group" "AWSSecurityGroup" {
   provider    = aws.primary
   name        = "AWSSecurityGroup-${random_id.rando_primary.hex}"
@@ -331,6 +340,11 @@ resource "aws_instance" "onpremdnsa" {
       type master;
       file "corp.contoso.io.zone";
       allow-update { none; };
+  };
+  zone "aws.contoso.io" { 
+  type forward; 
+  forward only;
+  forwarders { ${data.aws_route53_resolver_endpoint.inbound.ip_addresses[0]}; ${data.aws_route53_resolver_endpoint.inbound.ip_addresses[1]}; }; 
   };
   EOF
   cat <<EOF > /var/named/corp.contoso.io.zone

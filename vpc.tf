@@ -66,7 +66,7 @@ resource "aws_subnet" "micros4l-private-b" {
   provider          = aws.primary
   vpc_id            = aws_vpc.awsvpc.id
   cidr_block        = "10.10.10.0/24"
-  availability_zone = data.aws_availability_zones.available_secondary.names[1]
+  availability_zone = data.aws_availability_zones.available.names[1]
   tags = {
     Name = "micros4l-private-b-${random_id.rando_primary.hex}"
   }

@@ -25,16 +25,6 @@ data "aws_iam_instance_profile" "EC2profile" {
   ]
 }
 
-data "aws_route53_resolver_endpoint" "inbound" {
-  filter {
-    name = "NAME"
-    values = ["${aws_route53_resolver_endpoint.m4linbound.name}"]
-  }
-  depends_on = [
-    aws_route53_resolver_endpoint.m4linbound
-  ]
-}
-
 resource "aws_security_group" "AWSSecurityGroup" {
   provider    = aws.primary
   name        = "AWSSecurityGroup-${random_id.rando_primary.hex}"
@@ -342,11 +332,6 @@ resource "aws_instance" "onpremdnsa" {
       file "corp.contoso.io.zone";
       allow-update { none; };
   };
-  zone "aws.contoso.io" { 
-  type forward; 
-  forward only;
-  forwarders { ${data.aws_route53_resolver_endpoint.inbound.ip_addresses[0]}; ${data.aws_route53_resolver_endpoint.inbound.ip_addresses[1]}; }; 
-  };
   EOF
   cat <<EOF > /var/named/corp.contoso.io.zone
   \$TTL 86400
@@ -374,7 +359,6 @@ resource "aws_instance" "onpremdnsa" {
   sudo yum install -y https://s3.${var.region_secondary}.amazonaws.com/amazon-ssm-${var.region_secondary}/latest/linux_amd64/amazon-ssm-agent.rpm 
   sudo systemctl enable amazon-ssm-agent 
   sudo systemctl start amazon-ssm-agent
-    
 EOT
 }
 

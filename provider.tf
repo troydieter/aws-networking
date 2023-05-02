@@ -39,3 +39,13 @@ provider "aws" {
     }
   }
 }
+
+terraform {
+  backend "s3" {
+    bucket  = "troydieter.com-tfstate"
+    key     = "hybrid-dns/terraform.tfstate"
+    region  = "us-east-1"
+    profile = "default"
+    encrypt = true
+  }
+}

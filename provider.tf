@@ -1,7 +1,6 @@
 provider "aws" {
   alias   = "primary"
   region  = var.region_primary
-  profile = "default"
   default_tags {
     tags = {
       owner       = var.owner
@@ -15,7 +14,6 @@ provider "aws" {
 provider "aws" {
   alias   = "secondary"
   region  = var.region_secondary
-  profile = "default"
   default_tags {
     tags = {
       owner       = var.owner
@@ -29,7 +27,6 @@ provider "aws" {
 provider "aws" {
   alias   = "accepter"
   region  = var.region_secondary
-  profile = "default"
   default_tags {
     tags = {
       owner       = var.owner
